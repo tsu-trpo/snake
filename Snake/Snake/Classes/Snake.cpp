@@ -17,16 +17,16 @@ bool Snake::init()
     }
     screenSize = Director::getInstance()->getVisibleSize();
 
-    head = partSnake::create("SnakeHead.png");
+    head = partSnake::create("SnakeHeadRight.png");
     head->setPosition(Vec2(origin.x + screenSize.width * 0.5, origin.y + screenSize.height * 0.5));
     this->addChild(head);
     int lenght = 3;
 
     Vector<partSnake*> partMass;
 
-    for(int i = 0 ; i < 10; i++)
+    for(int i = 0 ; i < lenght; i++)
     {
-        tmpPartSnake = partSnake::create("NewElemSnake.png");
+        tmpPartSnake = partSnake::create("NewElemSnakeLR.png");
         tmpPartSnake->setPosition(Vec2(VisibleRect::center().x - 45 + 13*i , VisibleRect::center().y ));
         partMass.pushBack(tmpPartSnake);
     }
@@ -36,14 +36,9 @@ bool Snake::init()
         addChild(partSnake);
     }
 
-    tail = partSnake::create("SnakeTail.png");
+    tail = partSnake::create("SnakeTailRight.png");
     tail->setPosition(Vec2(VisibleRect::center().x -(40+20) , VisibleRect::center().y ));
     this->addChild(tail);
-
-    /*for(int i = 0; i<lenght+2;i++)
-    {
-        std::cout << tailX[i] << " " << tailY[i] << std::endl;
-    }*/
 
     snakeBodyParts = partMass;
 
@@ -54,11 +49,11 @@ bool Snake::init()
     this->addChild(labelScore);
 
     apple = Food::create();
-    //apple->setPosition(random(origin.x , origin.x + screenSize.width), random( origin.y ,origin.y + screenSize.height));
     apple->spawn();
     this->addChild(apple);
 
-    gameOver = false;
+    score = 0;
+    velocity = 5.f;
 
     auto listener = EventListenerKeyboard::create();
     listener->onKeyPressed = CC_CALLBACK_2(Snake::onKeyboardPressed, this);
@@ -78,53 +73,34 @@ EventKeyboard::KeyCode Snake::onKeyboardPressed(EventKeyboard::KeyCode keyCode, 
     {
         case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
         case EventKeyboard::KeyCode::KEY_A:
-             //head->xMovement--;
-            if(head->xMovement!=0 || head->yMovement!=0) {
-                point.setVar(head);
-                breakPoints.push_back(point);
-            }
 
+                head->lastXMov = head->xMovement;
+                head->lastYMov = head->yMovement;
                 head->yMovement = 0;
                 head->xMovement = -1;
-
 
             break;
         case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
         case EventKeyboard::KeyCode::KEY_D:
-             //head->xMovement++;
-            if(head->xMovement!=0 || head->yMovement!=0) {
-                point.setVar(head);
-                breakPoints.push_back(point);
-            }
-
+            head->lastXMov = head->xMovement;
+            head->lastYMov = head->yMovement;
                 head->yMovement = 0;
                 head->xMovement = 1;
-
             break;
         case EventKeyboard::KeyCode::KEY_UP_ARROW:
         case EventKeyboard::KeyCode::KEY_W:
-            //head->yMovement++;
-            if(head->xMovement!=0 || head->yMovement!=0) {
-                point.setVar(head);
-                breakPoints.push_back(point);
-            }
-
+            head->lastXMov = head->xMovement;
+            head->lastYMov = head->yMovement;
                 head->yMovement = 1;
                 head->xMovement = 0;
 
             break;
         case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
         case EventKeyboard::KeyCode::KEY_S:
-            //head->yMovement--;
-            if(head->xMovement!=0 || head->yMovement!=0) {
-                point.setVar(head);
-                breakPoints.push_back(point);
-            }
-
+            head->lastXMov = head->xMovement;
+            head->lastYMov = head->yMovement;
                 head->yMovement = -1;
                 head->xMovement = 0;
-
-
             break;
     }
     this->scheduleUpdate();
@@ -160,26 +136,161 @@ void Snake::onKeyboardReleased(EventKeyboard::KeyCode keyCode, Event *event)
 
 }
 
+bool Snake::snakeHeadCollisonWithBody()
+{
+    for(auto &partSnake: snakeBodyParts)
+    {
+        if(head->getBoundingBox().intersectsRect(partSnake->getBoundingBox()))
+        {
+            return true;
+        }
+    }
+    if(head->getBoundingBox().intersectsRect(tail->getBoundingBox()))
+    {
+        return true;
+    }
+    return false;
+}
+
+bool Snake::snakeHeadCollisonWithFood()
+{
+    if(head->getBoundingBox().intersectsRect(apple->getBoundingBox()))
+    {
+        apple->spawn();
+        score++;
+        std::stringstream ss;
+        ss << score;
+        std::string ScoreString = ss.str();
+        std::string gameScoreString = "Score:" + ScoreString;
+        labelScore->setString(gameScoreString.c_str());
+
+        tmpPartSnake = partSnake::create("NewElemSnakeLR.png");
+        float posX = tail->getPositionX() - 13;
+        float posY = tail->getPositionY();
+        tail->setPosition(posX,posY);
+        posX+=13;
+        posY;
+        tmpPartSnake->setPosition(posX,posY);
+        addChild(tmpPartSnake);
+        snakeBodyParts.pushBack(tmpPartSnake);
+
+        countApple++;
+    }
+
+    if(countApple == 5)
+    {
+        velocity += 1.f;
+        countApple = 0;
+    }
+}
+
+void Snake::endGame()
+{
+    this->unscheduleUpdate();
+}
+
 void Snake::update(float delta)
 {
-    float headPosX = head->getPositionX() ;
+    float headPosX = head->getPositionX();
     float headPosY = head->getPositionY();
-    float tmpX;
-    float tmpY;
+    float tmpX,changePosX;
+    float tmpY,changePosY;
 
-    float newPosX = head->getPositionX() + (head->xMovement * 5.f);
-    float newPosY = head->getPositionY() + (head->yMovement * 5.f);
+    int lastDirX = head->lastXMov;
+    int lastDirY = head->lastYMov;
+    int tmpDirX,tmpDirY;
+
+    float newPosX = head->getPositionX() + (head->xMovement * velocity);
+    float newPosY = head->getPositionY() + (head->yMovement * velocity);
     head->setPosition(newPosX, newPosY);
+
+    if(head->getPositionX() < origin.x) head->setPositionX(screenSize.width-30);
+    if(head->getPositionX() > origin.x + screenSize.width) head->setPositionX(origin.x +30);
+    if(head->getPositionY() < origin.y) head->setPositionY(screenSize.height-30);
+    if(head->getPositionY() > origin.y + screenSize.height) head->setPositionY(origin.y + 30);
+
+    if(snakeHeadCollisonWithBody())
+    {
+        endGame();
+    }
+    snakeHeadCollisonWithFood();
+
+
+    if(head->xMovement == -1) {
+        head->rotate("SnakeHeadLeft.png");
+    }
+    if(head->xMovement == 1) {
+        head->rotate("SnakeHeadRight.png");}
+    if(head->yMovement == -1) {
+        head->rotate("SnakeHeadDown.png");
+    }
+    if(head->yMovement == 1) {
+        head->rotate("SnakeHeadUp.png");
+    }
+
+
+    changePosX = newPosX - headPosX;
+    changePosY = newPosY - headPosY;
+
+    if(head->yMovement == 0 && head->xMovement == 1)headPosX = headPosX - (changePosX+28) ;
+    if(head->yMovement == 0 && head->xMovement == -1)headPosX = headPosX + (changePosX+28) ;
+    if(head->yMovement == 1 && head->xMovement ==0)headPosY = headPosY - (changePosY+28) ;
+    if(head->yMovement == -1 && head->xMovement == -0)headPosY = headPosY + (changePosY+28) ;
 
     for(auto &partSnake: snakeBodyParts)
     {
-        tmpX = partSnake->getPositionX() ;
+        tmpX = partSnake->getPositionX();
         tmpY = partSnake->getPositionY();
+        partSnake->lastXMov = partSnake->xMovement;
+        partSnake->lastYMov = partSnake->yMovement;
+
+        partSnake->xMovement = lastDirX;
+        partSnake->yMovement = lastDirY;
+
+        if(partSnake->yMovement == 0 && partSnake->xMovement == 1) {
+
+            partSnake->rotate("NewElemSnakeLR.png");
+        }
+        if(partSnake->yMovement == 0 && partSnake->xMovement == -1)
+        {
+
+            partSnake->rotate("NewElemSnakeLR.png");
+        }
+        if(partSnake->xMovement == 0 && partSnake->yMovement == 1)
+        {
+
+            partSnake->rotate("NewElemSnakeUD.png");
+        }
+        if(partSnake->xMovement == 0 && partSnake->yMovement == -1)
+        {
+
+            partSnake->rotate("NewElemSnakeUD.png");
+        }
+
+
         partSnake->setPosition(headPosX,headPosY);
         headPosX = tmpX;
         headPosY = tmpY;
+        lastDirX = partSnake->lastXMov;
+        lastDirY = partSnake->lastYMov;
+
     }
 
+    if(head->xMovement == -1) {
+       tail->rotate("SnakeTailLeft.png");
+    }
+    if(head->xMovement == 1) {
+        tail->rotate("SnakeTailRight.png");}
+    if(head->yMovement == -1) {
+        tail->rotate("SnakeTailDown.png");
+    }
+    if(head->yMovement == 1) {
+        tail->rotate("SnakeTailUp.png");
+    }
+    tail->setPosition(headPosX,headPosY);
+
+    head->lastXMov = head->xMovement;
+    head->lastYMov = head->yMovement;
 }
 
 

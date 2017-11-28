@@ -7,3 +7,7 @@ partSnake* partSnake::create(std::string name)
     self->initWithFile(name);
     return self;
 }
+ void partSnake::rotate( std::string name)
+ {
+     this->initWithFile(name);
+ }

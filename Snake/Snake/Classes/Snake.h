@@ -8,48 +8,43 @@
 #include "partSnake.h"
 #include "sizeGameScene.h"
 #include "Food.h"
-#include "Globals.h"
 #include <vector>
-#include "breakPoint.h"
+#include <string.h>
 using namespace cocos2d;
 
 class Snake : public cocos2d::Layer
 {
 public:
 
-    int lenght;
-    int velocity;
+    float velocity;
     int score;
-
-    bool gameOver;
-
+    int countApple = 0;
+    
     Size screenSize;
 
     Vec2 origin;
-
+    int i = 0;
     Label *labelScore;
 
-    breakPoint point;
-
-    std::vector<breakPoint> breakPoints;
     partSnake* head;
     partSnake* tmpPartSnake;
     Vector<partSnake*> snakeBodyParts;
     partSnake* tail;
-
 
     Food* apple;
 
     static  cocos2d::Scene* createSnake();
     virtual bool init();
 
-    void snakeHeadCollison(Sprite* sprt);
+    bool snakeHeadCollisonWithBody();
+    bool snakeHeadCollisonWithFood();
 
     EventKeyboard::KeyCode onKeyboardPressed(EventKeyboard::KeyCode keyCode, Event* event);
     void onKeyboardReleased(EventKeyboard::KeyCode keyCode, Event* event);
-    //void initializeKeyboardEvents();
 
     void update(float delta);
+
+    void endGame();
 
     CREATE_FUNC(Snake);
 };
