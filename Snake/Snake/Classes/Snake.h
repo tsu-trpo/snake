@@ -10,6 +10,7 @@
 #include "Food.h"
 #include <vector>
 #include <string.h>
+#include "menu.h"
 using namespace cocos2d;
 
 class Snake : public cocos2d::Layer
@@ -19,12 +20,17 @@ public:
     float velocity;
     int score;
     int countApple = 0;
-    
+
     Size screenSize;
 
     Vec2 origin;
     int i = 0;
+
     Label *labelScore;
+    Label *startText;
+    Label *endText;
+
+    bool gameStart;
 
     partSnake* head;
     partSnake* tmpPartSnake;
@@ -37,7 +43,7 @@ public:
     virtual bool init();
 
     bool snakeHeadCollisonWithBody();
-    bool snakeHeadCollisonWithFood();
+    void snakeHeadCollisonWithFood();
 
     EventKeyboard::KeyCode onKeyboardPressed(EventKeyboard::KeyCode keyCode, Event* event);
     void onKeyboardReleased(EventKeyboard::KeyCode keyCode, Event* event);
@@ -46,6 +52,9 @@ public:
 
     void endGame();
 
+    void menu(Ref* psender);
+
+    void menuESC();
     CREATE_FUNC(Snake);
 };
 

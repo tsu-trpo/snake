@@ -1,5 +1,6 @@
 #include "AppDelegate.h"
 #include "Snake.h"
+#include "menu.h"
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
 
@@ -71,13 +72,15 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // Set the design resolution
     glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::EXACT_FIT);
-    auto frameSize = glview->getFrameSize();
     director->setContentScaleFactor(MIN(iPadProResolutionSize.height/designResolutionSize.height, iPadProResolutionSize.width/designResolutionSize.width));
 
     register_all_packages();
 
+    // CC_CALLBACK_1 is a macro which helps to indicate function pointer. Here, on click menu,
+    // 'firstMenuButtonTapped' method will get invoked
+
     // create a scene. it's an autorelease object
-    auto scene = Snake::createSnake();
+    auto scene = menu::createMenu();
 
     // run
     director->runWithScene(scene);

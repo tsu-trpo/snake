@@ -135,7 +135,7 @@ set(GAME_HEADERS
   Classes/AppDelegate.h
 
   ${PLATFORM_SPECIFIC_HEADERS}
-        Classes/Snake.h Classes/Snake.cpp Classes/partSnake.h Classes/partSnake.cpp Classes/sizeGameScene.h Classes/sizeGameScene.cpp Classes/Food.h Classes/Food.cpp )
+        Classes/Snake.h Classes/Snake.cpp Classes/partSnake.h Classes/partSnake.cpp Classes/sizeGameScene.h Classes/sizeGameScene.cpp Classes/Food.h Classes/Food.cpp Classes/menu.h Classes/menu.cpp )
 
 
 # Configure libcocos2d

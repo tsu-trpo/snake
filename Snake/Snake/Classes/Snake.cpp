@@ -22,6 +22,19 @@ bool Snake::init()
     this->addChild(head);
     int lenght = 3;
 
+    auto closeItem = MenuItemImage::create(
+            "CloseNormal.png",
+            "CloseSelected.png",
+            CC_CALLBACK_1(Snake::menu, this));
+
+    closeItem->setPosition(Vec2(origin.x + screenSize.width - closeItem->getContentSize().width/2 ,
+                                origin.y + closeItem->getContentSize().height/2));
+
+    // create menu, it's an autorelease object
+    auto menu = Menu::create(closeItem, NULL);
+    menu->setPosition(Vec2::ZERO);
+    this->addChild(menu, 1);
+
     Vector<partSnake*> partMass;
 
     for(int i = 0 ; i < lenght; i++)
@@ -48,12 +61,18 @@ bool Snake::init()
     labelScore->setPosition(Vec2(origin.x + screenSize.width * 0.8, origin.y + screenSize.height * 0.95));
     this->addChild(labelScore);
 
+    startText = Label::createWithTTF("Click D to start", "fonts/arial.ttf", scoreLabelSize);
+    startText->setPosition(Vec2(origin.x + screenSize.width * 0.5, origin.y + screenSize.height * 0.5 + 100));
+    this->addChild(startText);
+
     apple = Food::create();
     apple->spawn();
     this->addChild(apple);
 
     score = 0;
     velocity = 5.f;
+
+    bool gameStart = false;
 
     auto listener = EventListenerKeyboard::create();
     listener->onKeyPressed = CC_CALLBACK_2(Snake::onKeyboardPressed, this);
@@ -66,6 +85,18 @@ bool Snake::init()
 
 }
 
+void Snake::menu(Ref* psender)
+{
+    auto scence = menu::createMenu();
+    Director::getInstance()->replaceScene(scence);
+}
+
+void Snake::menuESC()
+{
+    auto scence = menu::createMenu();
+    Director::getInstance()->replaceScene(scence);
+}
+
 EventKeyboard::KeyCode Snake::onKeyboardPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {
 
@@ -73,34 +104,49 @@ EventKeyboard::KeyCode Snake::onKeyboardPressed(EventKeyboard::KeyCode keyCode, 
     {
         case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
         case EventKeyboard::KeyCode::KEY_A:
-
+            if(head->xMovement != 1) {
                 head->lastXMov = head->xMovement;
                 head->lastYMov = head->yMovement;
                 head->yMovement = 0;
                 head->xMovement = -1;
+            }
 
             break;
         case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
         case EventKeyboard::KeyCode::KEY_D:
-            head->lastXMov = head->xMovement;
-            head->lastYMov = head->yMovement;
+            if(head->xMovement != -1) {
+                if (!gameStart) {
+                    removeChild(startText);
+                    gameStart = true;
+                }
+
+                head->lastXMov = head->xMovement;
+                head->lastYMov = head->yMovement;
                 head->yMovement = 0;
                 head->xMovement = 1;
+            }
             break;
         case EventKeyboard::KeyCode::KEY_UP_ARROW:
         case EventKeyboard::KeyCode::KEY_W:
-            head->lastXMov = head->xMovement;
-            head->lastYMov = head->yMovement;
+            if(head->yMovement != -1) {
+                head->lastXMov = head->xMovement;
+                head->lastYMov = head->yMovement;
                 head->yMovement = 1;
                 head->xMovement = 0;
+            }
 
             break;
         case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
         case EventKeyboard::KeyCode::KEY_S:
-            head->lastXMov = head->xMovement;
-            head->lastYMov = head->yMovement;
+            if(head->yMovement != 1) {
+                head->lastXMov = head->xMovement;
+                head->lastYMov = head->yMovement;
                 head->yMovement = -1;
                 head->xMovement = 0;
+            }
+            break;
+        case EventKeyboard::KeyCode ::KEY_ESCAPE:
+            menuESC();
             break;
     }
     this->scheduleUpdate();
@@ -152,7 +198,7 @@ bool Snake::snakeHeadCollisonWithBody()
     return false;
 }
 
-bool Snake::snakeHeadCollisonWithFood()
+void Snake::snakeHeadCollisonWithFood()
 {
     if(head->getBoundingBox().intersectsRect(apple->getBoundingBox()))
     {
@@ -169,7 +215,6 @@ bool Snake::snakeHeadCollisonWithFood()
         float posY = tail->getPositionY();
         tail->setPosition(posX,posY);
         posX+=13;
-        posY;
         tmpPartSnake->setPosition(posX,posY);
         addChild(tmpPartSnake);
         snakeBodyParts.pushBack(tmpPartSnake);
@@ -177,7 +222,7 @@ bool Snake::snakeHeadCollisonWithFood()
         countApple++;
     }
 
-    if(countApple == 5)
+    if(countApple == 10)
     {
         velocity += 1.f;
         countApple = 0;
@@ -186,6 +231,10 @@ bool Snake::snakeHeadCollisonWithFood()
 
 void Snake::endGame()
 {
+    endText = Label::createWithTTF("Уou lose, press ESC", "fonts/arial.ttf", 40);
+    endText->setPosition(Vec2(origin.x + screenSize.width * 0.5, origin.y + screenSize.height * 0.5 + 100));
+    this->addChild(endText);
+
     this->unscheduleUpdate();
 }
 
@@ -198,16 +247,15 @@ void Snake::update(float delta)
 
     int lastDirX = head->lastXMov;
     int lastDirY = head->lastYMov;
-    int tmpDirX,tmpDirY;
 
     float newPosX = head->getPositionX() + (head->xMovement * velocity);
     float newPosY = head->getPositionY() + (head->yMovement * velocity);
     head->setPosition(newPosX, newPosY);
 
-    if(head->getPositionX() < origin.x) head->setPositionX(screenSize.width-30);
-    if(head->getPositionX() > origin.x + screenSize.width) head->setPositionX(origin.x +30);
-    if(head->getPositionY() < origin.y) head->setPositionY(screenSize.height-30);
-    if(head->getPositionY() > origin.y + screenSize.height) head->setPositionY(origin.y + 30);
+    if(head->getPositionX() < VisibleRect::left().x) head->setPositionX(VisibleRect::right().x-30);
+    if(head->getPositionX() > VisibleRect::right().x) head->setPositionX( VisibleRect::left().x +30);
+    if(head->getPositionY() <  VisibleRect::bottom().y) head->setPositionY(VisibleRect::top().y-30);
+    if(head->getPositionY() > VisibleRect::top().y) head->setPositionY(VisibleRect::bottom().y + 30);
 
     if(snakeHeadCollisonWithBody())
     {
