@@ -126,12 +126,12 @@ if ( WIN32 )
 endif( WIN32 )
 
 set(GAME_SRC
-        Classes/AppDelegate.cpp Classes/gameScene.cpp
+        Classes/AppDelegate.cpp Classes/GameScene.cpp
   ${PLATFORM_SPECIFIC_SRC}
 )
 
 set(GAME_HEADERS
-  Classes/AppDelegate.h Classes/gameScene.h
+        Classes/AppDelegate.h Classes/GameScene.h
   ${PLATFORM_SPECIFIC_HEADERS}
 )
 

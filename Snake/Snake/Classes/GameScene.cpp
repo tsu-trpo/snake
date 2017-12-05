@@ -1,14 +1,14 @@
-#include "gameScene.h"
+#include "GameScene.h"
 
-Scene * Snake::createSnake()
+Scene * GameScene::createGameScene()
 {
     auto scene = Scene::create();
-    auto layer = Snake::create();
+    auto layer = GameScene::create();
     scene->addChild(layer,0);
     return scene;
 }
 
-bool Snake::init()
+bool GameScene::init()
 {
     if(!Layer::init())
     {

@@ -1,5 +1,5 @@
 #include "AppDelegate.h"
-#include "gameScene.h"
+#include "GameScene.h"
 #if USE_AUDIO_ENGINE && USE_SIMPLE_AUDIO_ENGINE
 #error "Don't use AudioEngine and SimpleAudioEngine at the same time. Please just select one in your game!"
 #endif
@@ -72,7 +72,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     register_all_packages();
 
-    auto scene = Snake::createSnake();
+    auto scene = GameScene::createGameScene();
     director->runWithScene(scene);
 
     return true;
