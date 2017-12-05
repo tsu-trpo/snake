@@ -127,13 +127,13 @@ endif( WIN32 )
 
 set(GAME_SRC
   Classes/AppDelegate.cpp
-        Classes/Snake.cpp
+        Classes/gameScene.cpp
   ${PLATFORM_SPECIFIC_SRC}
 )
 
 set(GAME_HEADERS
   Classes/AppDelegate.h
-        Classes/Snake.h
+        Classes/gameScene.h
   ${PLATFORM_SPECIFIC_HEADERS}
 )
 

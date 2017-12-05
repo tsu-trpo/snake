@@ -1,10 +1,10 @@
-#include "Snake.h"
+#include "gameScene.h"
 
 Scene * Snake::createSnake()
 {
     auto scene = Scene::create();
     auto layer = Snake::create();
-    scene->addChild(layer);
+    scene->addChild(layer,0);
     return scene;
 }
 

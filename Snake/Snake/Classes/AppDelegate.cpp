@@ -1,5 +1,5 @@
 #include "AppDelegate.h"
-#include "Snake.h"
+#include "gameScene.h"
 #if USE_AUDIO_ENGINE && USE_SIMPLE_AUDIO_ENGINE
 #error "Don't use AudioEngine and SimpleAudioEngine at the same time. Please just select one in your game!"
 #endif

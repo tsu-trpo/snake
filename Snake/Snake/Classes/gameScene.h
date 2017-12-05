@@ -1,5 +1,5 @@
-#ifndef MYGAME_SNAKE_H
-#define MYGAME_SNAKE_H
+#ifndef MYGAME_GAMESCENE_H
+#define MYGAME_GAMESCENE_H
 
 #include "cocos2d.h"
 
