@@ -7,9 +7,9 @@ using namespace cocos2d;
 
 class Snake : public cocos2d::Layer
 {
-
-public:
     Label *labelScore;
+public:
+
 
     static cocos2d::Scene* createSnake();
 
