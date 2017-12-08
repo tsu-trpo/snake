@@ -1,6 +1,4 @@
-#ifndef MYGAME_GAMESCENE_H
-#define MYGAME_GAMESCENE_H
-
+#pragma once
 #include "cocos2d.h"
 #include "Snake.h"
 
@@ -16,4 +14,3 @@ public:
     CREATE_FUNC(GameScene);
 };
 
-#endif

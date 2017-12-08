@@ -1,12 +1,5 @@
 #include "Snake.h"
 
-Layer* Snake::createSnake()
-{
-    auto layer = Snake::create();
-
-    return layer;
-}
-
 bool Snake::init()
 {
     if(!Layer::init())
@@ -21,14 +14,14 @@ bool Snake::init()
     head->setPosition(Vec2(origin.x + screenSize.width * 0.5, origin.y + screenSize.height * 0.5));
     this->addChild(head);
 
-    int lenght = 3;
+    int length = 3;
 
     PartSnake* tmpPartSnake;
 
-    for(int i = 0; i < lenght; i++)
+    for(int i = 0; i < length; i++)
     {
         tmpPartSnake = PartSnake::createPartSnake("NewElemSnake.png");
-        tmpPartSnake->setPosition(Vec2(origin.x + screenSize.width * 0.5 - 45 + 13*i , origin.y + screenSize.height * 0.5));
+        tmpPartSnake->setPosition(Vec2(head->getPositionX() - (head->getBoundingBox().size.width/2 + tmpPartSnake->getBoundingBox().size.width * i) , head->getPositionY()));
         snakeBodyPart.pushBack(tmpPartSnake);
     }
 
@@ -38,7 +31,7 @@ bool Snake::init()
     }
 
     tail = PartSnake::createPartSnake("SnakeTail.png");
-    tail->setPosition(Vec2(origin.x + screenSize.width * 0.5 -(40+20) , origin.y + screenSize.height * 0.5));
+    tail->setPosition(Vec2(head->getPositionX() - (head->getBoundingBox().size.width/2 + tmpPartSnake->getBoundingBox().size.width * length) , head->getPositionY()));
     this->addChild(tail);
 
     return true;

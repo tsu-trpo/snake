@@ -1,8 +1,6 @@
-#ifndef MYGAME_PARTSNAKE_H
-#define MYGAME_PARTSNAKE_H
+#pragma once
 #include "cocos2d.h"
-#include <stdio.h>
-#include <string.h>
+#include <string>
 
 using  namespace cocos2d;
 
@@ -13,4 +11,3 @@ public:
     static PartSnake* createPartSnake(std::string nameSprite);
 };
 
-#endif

@@ -1,20 +1,17 @@
-#ifndef MYGAME_SNAKE_H
-#define MYGAME_SNAKE_H
-
+#pragma once
 #include "cocos2d.h"
 #include "PartSnake.h"
-
+#include <iostream>
 class Snake : public Layer
 {
 public:
 
-    PartSnake* head;
-    PartSnake* tail;
+    PartSnake* head = nullptr;
+    PartSnake* tail = nullptr;
     Vector<PartSnake*> snakeBodyPart;
 
-    static Layer* createSnake();
     virtual bool init();
     CREATE_FUNC(Snake);
 };
 
-#endif
+
