@@ -40,4 +40,6 @@ bool Snake::init()
     tail = PartSnake::createPartSnake("SnakeTail.png");
     tail->setPosition(Vec2(origin.x + screenSize.width * 0.5 -(40+20) , origin.y + screenSize.height * 0.5));
     this->addChild(tail);
+
+    return true;
 }
