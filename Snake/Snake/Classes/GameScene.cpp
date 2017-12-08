@@ -2,15 +2,12 @@
 
 Scene * GameScene::createGameScene()
 {
-    auto scene = Scene::create();
-    auto layer = GameScene::create();
-    scene->addChild(layer,0);
-    return scene;
+    return GameScene::create();
 }
 
 bool GameScene::init()
 {
-    if(!Layer::init())
+    if(!Scene::init())
     {
         return  false;
     }
@@ -24,4 +21,9 @@ bool GameScene::init()
     auto background = Sprite::create("background.png");
     background->setPosition(Vec2(origin.x + screenSize.width * 0.5, origin.y + screenSize.height * 0.5));
     this->addChild(background,0);
+
+    auto Snake = Snake::createSnake();
+    this->addChild(Snake);
+
+    return true;
 }
