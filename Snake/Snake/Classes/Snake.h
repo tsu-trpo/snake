@@ -3,7 +3,6 @@
 
 #include "cocos2d.h"
 #include "PartSnake.h"
-#include "GameScene.h"
 
 class Snake : public Layer
 {
