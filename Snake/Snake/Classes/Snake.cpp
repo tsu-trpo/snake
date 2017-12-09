@@ -16,13 +16,12 @@ bool Snake::init()
 
     int length = 3;
 
-    PartSnake* tmpPartSnake;
-
     for(int i = 0; i < length; i++)
     {
-        tmpPartSnake = PartSnake::createPartSnake("NewElemSnake.png");
-        tmpPartSnake->setPosition(Vec2(head->getPositionX() - (head->getBoundingBox().size.width/2 + tmpPartSnake->getBoundingBox().size.width * i) , head->getPositionY()));
-        snakeBodyPart.pushBack(tmpPartSnake);
+        PartSnake* tmp;
+        tmp = PartSnake::createPartSnake("NewElemSnake.png");
+        tmp->setPosition(Vec2(head->getPositionX() - (head->getBoundingBox().size.width/2 + tmp->getBoundingBox().size.width * i) , head->getPositionY()));
+        snakeBodyPart.pushBack(tmp);
     }
 
     for (auto& partSnake: snakeBodyPart)
@@ -31,7 +30,7 @@ bool Snake::init()
     }
 
     tail = PartSnake::createPartSnake("SnakeTail.png");
-    tail->setPosition(Vec2(head->getPositionX() - (head->getBoundingBox().size.width/2 + tmpPartSnake->getBoundingBox().size.width * length) , head->getPositionY()));
+    tail->setPosition(Vec2(head->getPositionX() - (head->getBoundingBox().size.width/2  + snakeBodyPart.back()->getBoundingBox().size.width * length) , head->getPositionY()));
     this->addChild(tail);
 
     return true;

@@ -2,7 +2,7 @@
 
 PartSnake* PartSnake::createPartSnake(std::string nameSprite)
 {
-    PartSnake *self = new (std::nothrow) PartSnake;
+    PartSnake *self = new PartSnake;
     self->initWithFile(nameSprite);
     self->autorelease();
     return self;
