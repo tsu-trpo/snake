@@ -2,6 +2,8 @@
 #include "cocos2d.h"
 #include "PartSnake.h"
 #include <iostream>
+#include "GlobalConstants.h"
+
 class Snake : public Layer
 {
 public:

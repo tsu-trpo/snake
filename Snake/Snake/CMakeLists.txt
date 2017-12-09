@@ -130,6 +130,7 @@ set(GAME_SRC
         Classes/GameScene.cpp
         Classes/PartSnake.cpp
         Classes/Snake.cpp
+        Classes/GlobalConstants.cpp
     ${PLATFORM_SPECIFIC_SRC})
 
 set(GAME_HEADERS
@@ -137,7 +138,8 @@ set(GAME_HEADERS
         Classes/GameScene.h
         Classes/PartSnake.h
         Classes/Snake.h
-    ${PLATFORM_SPECIFIC_HEADERS})
+        Classes/GlobalConstants.h
+        ${PLATFORM_SPECIFIC_HEADERS})
 
 
 # Configure libcocos2d
