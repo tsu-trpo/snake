@@ -18,7 +18,7 @@ bool GameScene::init()
     labelScore->setPosition(Vec2(origin.x + screenSize.width * 0.8, origin.y + screenSize.height * 0.95));
     this->addChild(labelScore,1);
 
-    auto background = Sprite::create("background.png");
+    auto background = Sprite::create(backgroundImage);
     background->setPosition(Vec2(origin.x + screenSize.width * 0.5, origin.y + screenSize.height * 0.5));
     this->addChild(background,0);
 

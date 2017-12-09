@@ -130,7 +130,6 @@ set(GAME_SRC
         Classes/GameScene.cpp
         Classes/PartSnake.cpp
         Classes/Snake.cpp
-        Classes/GlobalConstants.cpp
     ${PLATFORM_SPECIFIC_SRC})
 
 set(GAME_HEADERS

@@ -10,7 +10,7 @@ bool Snake::init()
     auto screenSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    head = PartSnake::createPartSnake(GlobalConstants::snakeSprite[0]);
+    head = PartSnake::createPartSnake(snakeHeadImage);
     head->setPosition(Vec2(origin.x + screenSize.width * 0.5, origin.y + screenSize.height * 0.5));
     this->addChild(head);
 
@@ -18,7 +18,7 @@ bool Snake::init()
 
     for(int i = 0; i < length; i++)
     {
-        PartSnake*  partSnake = PartSnake::createPartSnake(GlobalConstants::snakeSprite[1]);
+        PartSnake*  partSnake = PartSnake::createPartSnake(snakePartImage);
         partSnake->setPosition(Vec2(head->getPositionX() - (head->getBoundingBox().size.width/2 + partSnake->getBoundingBox().size.width * i) , head->getPositionY()));
         snakeBodyPart.pushBack(partSnake);
     }
@@ -28,7 +28,7 @@ bool Snake::init()
         addChild(partSnake);
     }
 
-    tail = PartSnake::createPartSnake(GlobalConstants::snakeSprite[2]);
+    tail = PartSnake::createPartSnake(snakeTailImage);
     tail->setPosition(Vec2(head->getPositionX() - (head->getBoundingBox().size.width/2  + snakeBodyPart.back()->getBoundingBox().size.width * length) , head->getPositionY()));
     this->addChild(tail);
 
