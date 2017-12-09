@@ -3,6 +3,7 @@
 #include "PartSnake.h"
 #include <iostream>
 #include "GlobalConstants.h"
+#include "Food.h"
 
 class Snake : public Layer
 {
