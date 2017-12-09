@@ -18,10 +18,10 @@ bool Snake::init()
 
     for(int i = 0; i < length; i++)
     {
-        PartSnake* tmp;
-        tmp = PartSnake::createPartSnake("NewElemSnake.png");
-        tmp->setPosition(Vec2(head->getPositionX() - (head->getBoundingBox().size.width/2 + tmp->getBoundingBox().size.width * i) , head->getPositionY()));
-        snakeBodyPart.pushBack(tmp);
+        PartSnake* partSnake;
+        partSnake = PartSnake::createPartSnake("NewElemSnake.png");
+        partSnake->setPosition(Vec2(head->getPositionX() - (head->getBoundingBox().size.width/2 + partSnake->getBoundingBox().size.width * i) , head->getPositionY()));
+        snakeBodyPart.pushBack(partSnake);
     }
 
     for (auto& partSnake: snakeBodyPart)
