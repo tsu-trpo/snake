@@ -18,8 +18,7 @@ bool Snake::init()
 
     for(int i = 0; i < length; i++)
     {
-        PartSnake* partSnake;
-        partSnake = PartSnake::createPartSnake("NewElemSnake.png");
+        PartSnake*  partSnake = PartSnake::createPartSnake("NewElemSnake.png");
         partSnake->setPosition(Vec2(head->getPositionX() - (head->getBoundingBox().size.width/2 + partSnake->getBoundingBox().size.width * i) , head->getPositionY()));
         snakeBodyPart.pushBack(partSnake);
     }
