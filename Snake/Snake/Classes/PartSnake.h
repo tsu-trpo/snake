@@ -8,6 +8,6 @@ class PartSnake : public Sprite
 {
 public:
 
-    static PartSnake* createPartSnake(std::string nameSprite);
+    static PartSnake* createPartSnake(const std::string &nameSprite);
 };
 

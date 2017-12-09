@@ -1,6 +1,6 @@
 #include "PartSnake.h"
 
-PartSnake* PartSnake::createPartSnake(std::string nameSprite)
+PartSnake* PartSnake::createPartSnake(const std::string &nameSprite)
 {
     PartSnake *self = new PartSnake;
     self->initWithFile(nameSprite);
