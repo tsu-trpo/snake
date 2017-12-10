@@ -1,6 +1,7 @@
 #pragma once
 #include "cocos2d.h"
 #include "Snake.h"
+#include "Food.h"
 
 using namespace cocos2d;
 

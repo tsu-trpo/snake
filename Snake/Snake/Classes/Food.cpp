@@ -3,7 +3,7 @@
 Food* Food::createApple()
 {
     Food *self = new Food();
-    self->initWithFile(apple);
+    self->initWithFile(appleImage);
     self->autorelease();
 
     return self;

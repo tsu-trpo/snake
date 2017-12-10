@@ -32,5 +32,75 @@ bool Snake::init()
     tail->setPosition(Vec2(head->getPositionX() - (head->getBoundingBox().size.width/2  + snakeBodyPart.back()->getBoundingBox().size.width * length) , head->getPositionY()));
     this->addChild(tail);
 
+    velocity = 0.05;
+
+    auto listener = EventListenerKeyboard::create();
+    listener->onKeyPressed = CC_CALLBACK_2(Snake::onKeyboardPressed, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, head);
+
     return true;
+}
+
+EventKeyboard::KeyCode Snake::onKeyboardPressed(EventKeyboard::KeyCode keyCode, Event* event)
+{
+
+    switch (keyCode)
+    {
+        case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+        case EventKeyboard::KeyCode::KEY_A:
+            if(head->xMovement != 1) {
+                head->yMovement = 0;
+                head->xMovement = -1;
+            }
+
+            break;
+        case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+        case EventKeyboard::KeyCode::KEY_D:
+            if(head->xMovement != -1) {
+                head->yMovement = 0;
+                head->xMovement = 1;
+            }
+            break;
+        case EventKeyboard::KeyCode::KEY_UP_ARROW:
+        case EventKeyboard::KeyCode::KEY_W:
+            if(head->yMovement != -1) {
+                head->yMovement = 1;
+                head->xMovement = 0;
+            }
+
+            break;
+        case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
+        case EventKeyboard::KeyCode::KEY_S:
+            if(head->yMovement != 1) {
+                head->yMovement = -1;
+                head->xMovement = 0;
+            }
+            break;
+    }
+    this->schedule(schedule_selector(Snake::update), velocity);
+
+}
+
+void Snake::update(float delta)
+{
+    float headPosX = head->getPositionX();
+    float headPosY = head->getPositionY();
+
+    float newPosX = head->getPositionX() + (head->xMovement * oneStep);
+    float newPosY = head->getPositionY() + (head->yMovement * oneStep);
+    head->setPosition(newPosX, newPosY);
+    
+    for(auto &partSnake: snakeBodyPart)
+    {
+        float partSnakePosX = partSnake->getPositionX();
+        float partSnakePosY = partSnake->getPositionY();
+
+        partSnake->setPosition(headPosX,headPosY);
+
+        headPosX = partSnakePosX;
+        headPosY = partSnakePosY;
+    }
+
+    tail->setPosition(headPosX,headPosY);
+
 }

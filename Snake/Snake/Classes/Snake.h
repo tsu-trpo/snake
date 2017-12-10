@@ -3,15 +3,19 @@
 #include "PartSnake.h"
 #include <iostream>
 #include "GlobalConstants.h"
-#include "Food.h"
 
 class Snake : public Layer
 {
 public:
+    float velocity;
 
     PartSnake* head = nullptr;
     PartSnake* tail = nullptr;
     Vector<PartSnake*> snakeBodyPart;
+
+    EventKeyboard::KeyCode onKeyboardPressed(EventKeyboard::KeyCode keyCode, Event* event);
+
+    void update(float delta);
 
     virtual bool init();
     CREATE_FUNC(Snake);
