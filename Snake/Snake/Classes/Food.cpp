@@ -11,7 +11,7 @@ Food* Food::createApple()
 
 void Food::spawnApple()
 {
-    float startPoint = 0;
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
     Size screenSize = Director::getInstance()->getVisibleSize();
-    this->setPosition(random(startPoint,screenSize.width), random(startPoint,screenSize.height));
+    this->setPosition(random(origin.x,screenSize.width), random(origin.y,screenSize.height));
 }
