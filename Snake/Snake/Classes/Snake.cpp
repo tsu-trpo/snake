@@ -32,8 +32,6 @@ bool Snake::init()
     tail->setPosition(Vec2(head->getPositionX() - (head->getBoundingBox().size.width/2  + snakeBodyPart.back()->getBoundingBox().size.width * length) , head->getPositionY()));
     this->addChild(tail);
 
-    velocity = 0.05;
-
     auto listener = EventListenerKeyboard::create();
     listener->onKeyPressed = CC_CALLBACK_2(Snake::onKeyboardPressed, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, head);
@@ -86,8 +84,8 @@ void Snake::update(float delta)
     float headPosX = head->getPositionX();
     float headPosY = head->getPositionY();
 
-    float newPosX = head->getPositionX() + (head->xMovement * oneStep);
-    float newPosY = head->getPositionY() + (head->yMovement * oneStep);
+    float newPosX = head->getPositionX() + (head->xMovement * snakeStepSize);
+    float newPosY = head->getPositionY() + (head->yMovement * snakeStepSize);
     head->setPosition(newPosX, newPosY);
     
     for(auto &partSnake: snakeBodyPart)

@@ -7,7 +7,7 @@
 class Snake : public Layer
 {
 public:
-    float velocity;
+    float velocity = 0.05;
 
     PartSnake* head = nullptr;
     PartSnake* tail = nullptr;

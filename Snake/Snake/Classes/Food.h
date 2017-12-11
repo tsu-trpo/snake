@@ -9,5 +9,5 @@ class Food : public Sprite
 {
 public:
     static Food* createApple();
-    void spawnApple();
+    void setRandomPositionApple();
 };

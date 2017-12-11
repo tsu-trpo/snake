@@ -9,7 +9,7 @@ Food* Food::createApple()
     return self;
 }
 
-void Food::spawnApple()
+void Food::setRandomPositionApple()
 {
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     Size screenSize = Director::getInstance()->getVisibleSize();

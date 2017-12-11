@@ -6,4 +6,4 @@ const std::string snakePartImage = "NewElemSnake.png";
 const std::string snakeTailImage = "SnakeTail.png";
 const std::string appleImage = "Apple.png";
 
-const float oneStep = 14;
+const float snakeStepSize = 14;
