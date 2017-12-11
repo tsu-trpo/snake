@@ -7,8 +7,7 @@ using  namespace cocos2d;
 class PartSnake : public Sprite
 {
 public:
-    int xMovement = 1;
-    int yMovement = 0;
+    Vec2 moveDirection{1,0};
 
     static PartSnake* createPartSnake(const std::string &nameSprite);
 };

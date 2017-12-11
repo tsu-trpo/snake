@@ -46,32 +46,28 @@ EventKeyboard::KeyCode Snake::onKeyboardPressed(EventKeyboard::KeyCode keyCode, 
     {
         case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
         case EventKeyboard::KeyCode::KEY_A:
-            if(head->xMovement != 1) {
-                head->yMovement = 0;
-                head->xMovement = -1;
+            if(head->moveDirection.x != 1) {
+                head->moveDirection.setPoint(-1,0);
             }
 
             break;
         case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
         case EventKeyboard::KeyCode::KEY_D:
-            if(head->xMovement != -1) {
-                head->yMovement = 0;
-                head->xMovement = 1;
+            if(head->moveDirection.x != -1) {
+                head->moveDirection.setPoint(1,0);
             }
             break;
         case EventKeyboard::KeyCode::KEY_UP_ARROW:
         case EventKeyboard::KeyCode::KEY_W:
-            if(head->yMovement != -1) {
-                head->yMovement = 1;
-                head->xMovement = 0;
+            if(head->moveDirection.y != -1) {
+                head->moveDirection.setPoint(0,1);
             }
 
             break;
         case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
         case EventKeyboard::KeyCode::KEY_S:
-            if(head->yMovement != 1) {
-                head->yMovement = -1;
-                head->xMovement = 0;
+            if(head->moveDirection.y != 1) {
+                head->moveDirection.setPoint(0,-1);
             }
             break;
     }
@@ -81,24 +77,20 @@ EventKeyboard::KeyCode Snake::onKeyboardPressed(EventKeyboard::KeyCode keyCode, 
 
 void Snake::update(float delta)
 {
-    float headPosX = head->getPositionX();
-    float headPosY = head->getPositionY();
+    Vec2 headPos = head->getPosition();
 
-    float newPosX = head->getPositionX() + (head->xMovement * snakeStepSize);
-    float newPosY = head->getPositionY() + (head->yMovement * snakeStepSize);
-    head->setPosition(newPosX, newPosY);
-    
+    Vec2 newHeadPos;
+    newHeadPos.setPoint(head->getPositionX() + (head->moveDirection.x * snakeStepSize),head->getPositionY() + (head->moveDirection.y * snakeStepSize));
+    head->setPosition(newHeadPos);
+
     for(auto &partSnake: snakeBodyPart)
     {
-        float partSnakePosX = partSnake->getPositionX();
-        float partSnakePosY = partSnake->getPositionY();
+        Vec2  partSnakePos = partSnake->getPosition();
 
-        partSnake->setPosition(headPosX,headPosY);
+        partSnake->setPosition(headPos);
 
-        headPosX = partSnakePosX;
-        headPosY = partSnakePosY;
+        headPos = partSnakePos;
     }
-
-    tail->setPosition(headPosX,headPosY);
+    tail->setPosition(headPos);
 
 }
