@@ -79,8 +79,8 @@ void Snake::update(float delta)
 {
     Vec2 headPos = head->getPosition();
 
-    Vec2 newHeadPos;
-    newHeadPos.setPoint(head->getPositionX() + (head->moveDirection.x * snakeStepSize),head->getPositionY() + (head->moveDirection.y * snakeStepSize));
+    Vec2 newHeadPos(head->getPositionX() + (head->moveDirection.x * snakeStepSize),head->getPositionY() + (head->moveDirection.y * snakeStepSize));;
+
     head->setPosition(newHeadPos);
 
     for(auto &partSnake: snakeBodyPart)
