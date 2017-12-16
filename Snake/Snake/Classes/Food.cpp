@@ -13,5 +13,5 @@ void Food::setRandomPositionApple()
 {
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     Size screenSize = Director::getInstance()->getVisibleSize();
-    this->setPosition(random(origin.x,screenSize.width), random(origin.y,screenSize.height));
+    setPosition(random(origin.x,screenSize.width), random(origin.y,screenSize.height));
 }

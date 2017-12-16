@@ -12,7 +12,7 @@ bool Snake::init()
 
     head = PartSnake::createPartSnake(snakeHeadImage);
     head->setPosition(Vec2(origin.x + screenSize.width * 0.5, origin.y + screenSize.height * 0.5));
-    this->addChild(head);
+    addChild(head);
 
     int length = 3;
 
@@ -30,13 +30,13 @@ bool Snake::init()
 
     tail = PartSnake::createPartSnake(snakeTailImage);
     tail->setPosition(Vec2(head->getPositionX() - (head->getBoundingBox().size.width/2  + snakeBodyPart.back()->getBoundingBox().size.width * length) , head->getPositionY()));
-    this->addChild(tail);
+    addChild(tail);
 
     auto listener = EventListenerKeyboard::create();
     listener->onKeyPressed = CC_CALLBACK_2(Snake::onKeyboardPressed, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, head);
 
-    this->schedule(schedule_selector(Snake::update), velocity);
+    schedule(schedule_selector(Snake::update), velocity);
 
     return true;
 }
