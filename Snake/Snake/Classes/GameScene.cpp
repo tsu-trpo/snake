@@ -25,5 +25,9 @@ bool GameScene::init()
     auto Snake = Snake::create();
     this->addChild(Snake);
 
+    auto apple = Food::createApple();
+    apple->setRandomPositionApple();
+    this->addChild(apple);
+
     return true;
 }

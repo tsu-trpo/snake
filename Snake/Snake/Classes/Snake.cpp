@@ -32,5 +32,66 @@ bool Snake::init()
     tail->setPosition(Vec2(head->getPositionX() - (head->getBoundingBox().size.width/2  + snakeBodyPart.back()->getBoundingBox().size.width * length) , head->getPositionY()));
     this->addChild(tail);
 
+    auto listener = EventListenerKeyboard::create();
+    listener->onKeyPressed = CC_CALLBACK_2(Snake::onKeyboardPressed, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, head);
+
+    this->schedule(schedule_selector(Snake::update), velocity);
+
     return true;
+}
+
+EventKeyboard::KeyCode Snake::onKeyboardPressed(EventKeyboard::KeyCode keyCode, Event* event)
+{
+
+    switch (keyCode)
+    {
+        case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+        case EventKeyboard::KeyCode::KEY_A:
+            if(head->moveDirection.x != 1) {
+                head->moveDirection.setPoint(-1,0);
+            }
+
+            break;
+        case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+        case EventKeyboard::KeyCode::KEY_D:
+            if(head->moveDirection.x != -1) {
+                head->moveDirection.setPoint(1,0);
+            }
+            break;
+        case EventKeyboard::KeyCode::KEY_UP_ARROW:
+        case EventKeyboard::KeyCode::KEY_W:
+            if(head->moveDirection.y != -1) {
+                head->moveDirection.setPoint(0,1);
+            }
+
+            break;
+        case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
+        case EventKeyboard::KeyCode::KEY_S:
+            if(head->moveDirection.y != 1) {
+                head->moveDirection.setPoint(0,-1);
+            }
+            break;
+    }
+}
+
+void Snake::update(float delta)
+{
+    Vec2 headPos = head->getPosition();
+
+    Vec2 newHeadPos(head->getPositionX() + (head->moveDirection.x * snakeStepSize),
+                    head->getPositionY() + (head->moveDirection.y * snakeStepSize));
+
+    head->setPosition(newHeadPos);
+
+    for(auto &partSnake: snakeBodyPart)
+    {
+        Vec2  partSnakePos = partSnake->getPosition();
+
+        partSnake->setPosition(headPos);
+
+        headPos = partSnakePos;
+    }
+    tail->setPosition(headPos);
+
 }
