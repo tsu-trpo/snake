@@ -16,18 +16,18 @@ bool GameScene::init()
 
     labelScore = Label::createWithTTF("Score: 0", "fonts/arial.ttf", 40);
     labelScore->setPosition(Vec2(origin.x + screenSize.width * 0.8, origin.y + screenSize.height * 0.95));
-    this->addChild(labelScore,1);
+    addChild(labelScore,1);
 
     auto background = Sprite::create(backgroundImage);
     background->setPosition(Vec2(origin.x + screenSize.width * 0.5, origin.y + screenSize.height * 0.5));
     this->addChild(background,0);
 
     auto Snake = Snake::create();
-    this->addChild(Snake);
+    addChild(Snake);
 
     auto apple = Food::createApple();
     apple->setRandomPositionApple();
-    this->addChild(apple);
+    addChild(apple);
 
     return true;
 }
