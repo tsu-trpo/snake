@@ -36,6 +36,8 @@ bool Snake::init()
     listener->onKeyPressed = CC_CALLBACK_2(Snake::onKeyboardPressed, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, head);
 
+    this->schedule(schedule_selector(Snake::update), velocity);
+
     return true;
 }
 
@@ -71,15 +73,14 @@ EventKeyboard::KeyCode Snake::onKeyboardPressed(EventKeyboard::KeyCode keyCode, 
             }
             break;
     }
-    this->schedule(schedule_selector(Snake::update), velocity);
-
 }
 
 void Snake::update(float delta)
 {
     Vec2 headPos = head->getPosition();
 
-    Vec2 newHeadPos(head->getPositionX() + (head->moveDirection.x * snakeStepSize),head->getPositionY() + (head->moveDirection.y * snakeStepSize));;
+    Vec2 newHeadPos(head->getPositionX() + (head->moveDirection.x * snakeStepSize),
+                    head->getPositionY() + (head->moveDirection.y * snakeStepSize));
 
     head->setPosition(newHeadPos);
 
