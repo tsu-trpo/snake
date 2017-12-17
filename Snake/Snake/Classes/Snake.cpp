@@ -38,7 +38,7 @@ bool Snake::init()
     listener->onKeyPressed = CC_CALLBACK_2(Snake::onKeyboardPressed, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, head);
 
-    schedule(schedule_selector(Snake::update), velocity);
+    //schedule(schedule_selector(Snake::update), velocity);
 
     return true;
 }
@@ -83,6 +83,23 @@ EventKeyboard::KeyCode Snake::onKeyboardPressed(EventKeyboard::KeyCode keyCode, 
             }
             break;
     }
+    schedule(schedule_selector(Snake::update), velocity);
+}
+
+void Snake::snakeHeadCollisonWithBody()
+{
+
+    for(auto &partSnake: snakeBodyPart)
+    {
+        if(head->getPosition() == partSnake->getPosition())
+        {
+            unschedule(schedule_selector(Snake::update));
+        }
+    }
+    if(head->getPosition() == tail->getPosition())
+    {
+        unschedule(schedule_selector(Snake::update));
+    }
 }
 
 void Snake::update(float delta)
@@ -94,6 +111,8 @@ void Snake::update(float delta)
                     head->getPositionY() + (head->moveDirection.y * snakeStepSize));
 
     head->setPosition(newHeadPos);
+
+    snakeHeadCollisonWithBody();
 
     for(auto &partSnake: snakeBodyPart)
     {
@@ -117,22 +136,10 @@ void Snake::update(float delta)
         previousDir = partSnake->previousDirection;
     }
 
-    if(previousDir.x == 1)
-    {
-        tail->setImage(snakeTailRightImage);
-    }
-    if(previousDir.x == -1)
-    {
-        tail->setImage(snakeTailLeftImage);
-    }
-    if(previousDir.y == 1)
-    {
-        tail->setImage(snakeTailUpImage);
-    }
-    if(previousDir.y == -1)
-    {
-        tail->setImage(snakeTailDownImage);
-    }
+    if(previousDir.x == 1)  tail->setImage(snakeTailRightImage);
+    if(previousDir.x == -1) tail->setImage(snakeTailLeftImage);
+    if(previousDir.y == 1)  tail->setImage(snakeTailUpImage);
+    if(previousDir.y == -1) tail->setImage(snakeTailDownImage);
 
     tail->setPosition(headPos);
 }

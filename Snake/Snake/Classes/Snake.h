@@ -17,6 +17,8 @@ public:
     PartSnake* tail = nullptr;
     Vector<PartSnake*> snakeBodyPart;
 
+    void snakeHeadCollisonWithBody();
+
     EventKeyboard::KeyCode onKeyboardPressed(EventKeyboard::KeyCode keyCode, Event* event);
 
     void update(float delta);
