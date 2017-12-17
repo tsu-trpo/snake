@@ -7,3 +7,8 @@ PartSnake* PartSnake::createPartSnake(const std::string &nameSprite)
     self->autorelease();
     return self;
 }
+
+void PartSnake::setImage(std::string name)
+{
+    initWithFile(name);
+}

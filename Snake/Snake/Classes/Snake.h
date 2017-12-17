@@ -7,6 +7,10 @@
 class Snake : public Layer
 {
 public:
+
+    Size screenSize;
+    Vec2 origin;
+
     float velocity = 0.05;
 
     PartSnake* head = nullptr;

@@ -7,10 +7,10 @@ bool Snake::init()
         return  false;
     }
 
-    auto screenSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+     screenSize = Director::getInstance()->getVisibleSize();
+     origin = Director::getInstance()->getVisibleOrigin();
 
-    head = PartSnake::createPartSnake(snakeHeadImage);
+    head = PartSnake::createPartSnake(snakeHeadRightImage);
     head->setPosition(Vec2(origin.x + screenSize.width * 0.5, origin.y + screenSize.height * 0.5));
     addChild(head);
 
@@ -18,8 +18,9 @@ bool Snake::init()
 
     for(int i = 0; i < length; i++)
     {
-        PartSnake*  partSnake = PartSnake::createPartSnake(snakePartImage);
-        partSnake->setPosition(Vec2(head->getPositionX() - (head->getBoundingBox().size.width/2 + partSnake->getBoundingBox().size.width * i) , head->getPositionY()));
+        PartSnake*  partSnake = PartSnake::createPartSnake(snakePartHorizontallyImage);
+        partSnake->setPosition(Vec2(head->getPositionX() - (head->getBoundingBox().size.width/2 + partSnake->getBoundingBox().size.width * i) ,
+                                    head->getPositionY()));
         snakeBodyPart.pushBack(partSnake);
     }
 
@@ -28,8 +29,9 @@ bool Snake::init()
         addChild(partSnake);
     }
 
-    tail = PartSnake::createPartSnake(snakeTailImage);
-    tail->setPosition(Vec2(head->getPositionX() - (head->getBoundingBox().size.width/2  + snakeBodyPart.back()->getBoundingBox().size.width * length) , head->getPositionY()));
+    tail = PartSnake::createPartSnake(snakeTailRightImage);
+    tail->setPosition(Vec2(head->getPositionX() - (head->getBoundingBox().size.width/2  + snakeBodyPart.back()->getBoundingBox().size.width * length) ,
+                           head->getPositionY()));
     addChild(tail);
 
     auto listener = EventListenerKeyboard::create();
@@ -49,27 +51,35 @@ EventKeyboard::KeyCode Snake::onKeyboardPressed(EventKeyboard::KeyCode keyCode, 
         case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
         case EventKeyboard::KeyCode::KEY_A:
             if(head->moveDirection.x != 1) {
+                head->previousDirection = head->moveDirection;
                 head->moveDirection.setPoint(-1,0);
+                head->setImage(snakeHeadLeftImage);
             }
 
             break;
         case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
         case EventKeyboard::KeyCode::KEY_D:
             if(head->moveDirection.x != -1) {
+                head->previousDirection = head->moveDirection;
                 head->moveDirection.setPoint(1,0);
+                head->setImage(snakeHeadRightImage);
             }
             break;
         case EventKeyboard::KeyCode::KEY_UP_ARROW:
         case EventKeyboard::KeyCode::KEY_W:
             if(head->moveDirection.y != -1) {
+                head->previousDirection = head->moveDirection;
                 head->moveDirection.setPoint(0,1);
+                head->setImage(snakeHeadUpImage);
             }
 
             break;
         case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
         case EventKeyboard::KeyCode::KEY_S:
             if(head->moveDirection.y != 1) {
+                head->previousDirection = head->moveDirection;
                 head->moveDirection.setPoint(0,-1);
+                head->setImage(snakeHeadDownImage);
             }
             break;
     }
@@ -78,6 +88,7 @@ EventKeyboard::KeyCode Snake::onKeyboardPressed(EventKeyboard::KeyCode keyCode, 
 void Snake::update(float delta)
 {
     Vec2 headPos = head->getPosition();
+    Vec2 previousDir = head->moveDirection;
 
     Vec2 newHeadPos(head->getPositionX() + (head->moveDirection.x * snakeStepSize),
                     head->getPositionY() + (head->moveDirection.y * snakeStepSize));
@@ -87,11 +98,41 @@ void Snake::update(float delta)
     for(auto &partSnake: snakeBodyPart)
     {
         Vec2  partSnakePos = partSnake->getPosition();
+        partSnake->previousDirection = partSnake->moveDirection;
+        partSnake->moveDirection = previousDir;
+
+        if(partSnake->moveDirection.x == 1 || partSnake->moveDirection.x == -1)
+        {
+            partSnake->setImage(snakePartHorizontallyImage);
+        }
+        if(partSnake->moveDirection.y == 1 || partSnake->moveDirection.y == -1)
+        {
+
+            partSnake->setImage(snakePartVerticallyImage);
+        }
 
         partSnake->setPosition(headPos);
 
         headPos = partSnakePos;
+        previousDir = partSnake->previousDirection;
     }
-    tail->setPosition(headPos);
 
+    if(previousDir.x == 1)
+    {
+        tail->setImage(snakeTailRightImage);
+    }
+    if(previousDir.x == -1)
+    {
+        tail->setImage(snakeTailLeftImage);
+    }
+    if(previousDir.y == 1)
+    {
+        tail->setImage(snakeTailUpImage);
+    }
+    if(previousDir.y == -1)
+    {
+        tail->setImage(snakeTailDownImage);
+    }
+
+    tail->setPosition(headPos);
 }
