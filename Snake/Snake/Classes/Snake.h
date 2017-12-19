@@ -6,18 +6,15 @@
 
 class Snake : public Layer
 {
-public:
-
     Size screenSize;
     Vec2 origin;
+public:
 
     float velocity = 0.05;
 
     PartSnake* head = nullptr;
     PartSnake* tail = nullptr;
     Vector<PartSnake*> snakeBodyPart;
-
-    void snakeHeadCollisonWithBody();
 
     EventKeyboard::KeyCode onKeyboardPressed(EventKeyboard::KeyCode keyCode, Event* event);
 

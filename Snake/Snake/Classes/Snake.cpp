@@ -7,8 +7,8 @@ bool Snake::init()
         return  false;
     }
 
-     screenSize = Director::getInstance()->getVisibleSize();
-     origin = Director::getInstance()->getVisibleOrigin();
+    screenSize = Director::getInstance()->getVisibleSize();
+    origin = Director::getInstance()->getVisibleOrigin();
 
     head = PartSnake::createPartSnake(snakeHeadRightImage);
     head->setPosition(Vec2(origin.x + screenSize.width * 0.5, origin.y + screenSize.height * 0.5));
@@ -38,7 +38,7 @@ bool Snake::init()
     listener->onKeyPressed = CC_CALLBACK_2(Snake::onKeyboardPressed, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, head);
 
-    //schedule(schedule_selector(Snake::update), velocity);
+    schedule(schedule_selector(Snake::update), velocity);
 
     return true;
 }
@@ -51,7 +51,6 @@ EventKeyboard::KeyCode Snake::onKeyboardPressed(EventKeyboard::KeyCode keyCode, 
         case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
         case EventKeyboard::KeyCode::KEY_A:
             if(head->moveDirection.x != 1) {
-                head->previousDirection = head->moveDirection;
                 head->moveDirection.setPoint(-1,0);
                 head->setImage(snakeHeadLeftImage);
             }
@@ -60,7 +59,6 @@ EventKeyboard::KeyCode Snake::onKeyboardPressed(EventKeyboard::KeyCode keyCode, 
         case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
         case EventKeyboard::KeyCode::KEY_D:
             if(head->moveDirection.x != -1) {
-                head->previousDirection = head->moveDirection;
                 head->moveDirection.setPoint(1,0);
                 head->setImage(snakeHeadRightImage);
             }
@@ -68,7 +66,6 @@ EventKeyboard::KeyCode Snake::onKeyboardPressed(EventKeyboard::KeyCode keyCode, 
         case EventKeyboard::KeyCode::KEY_UP_ARROW:
         case EventKeyboard::KeyCode::KEY_W:
             if(head->moveDirection.y != -1) {
-                head->previousDirection = head->moveDirection;
                 head->moveDirection.setPoint(0,1);
                 head->setImage(snakeHeadUpImage);
             }
@@ -77,34 +74,16 @@ EventKeyboard::KeyCode Snake::onKeyboardPressed(EventKeyboard::KeyCode keyCode, 
         case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
         case EventKeyboard::KeyCode::KEY_S:
             if(head->moveDirection.y != 1) {
-                head->previousDirection = head->moveDirection;
                 head->moveDirection.setPoint(0,-1);
                 head->setImage(snakeHeadDownImage);
             }
             break;
     }
-    schedule(schedule_selector(Snake::update), velocity);
-}
-
-void Snake::snakeHeadCollisonWithBody()
-{
-
-    for(auto &partSnake: snakeBodyPart)
-    {
-        if(head->getPosition() == partSnake->getPosition())
-        {
-            unschedule(schedule_selector(Snake::update));
-        }
-    }
-    if(head->getPosition() == tail->getPosition())
-    {
-        unschedule(schedule_selector(Snake::update));
-    }
 }
 
 void Snake::update(float delta)
 {
-    Vec2 headPos = head->getPosition();
+    Vec2 previousPos = head->getPosition();
     Vec2 previousDir = head->moveDirection;
 
     Vec2 newHeadPos(head->getPositionX() + (head->moveDirection.x * snakeStepSize),
@@ -112,34 +91,46 @@ void Snake::update(float delta)
 
     head->setPosition(newHeadPos);
 
-    snakeHeadCollisonWithBody();
-
     for(auto &partSnake: snakeBodyPart)
     {
         Vec2  partSnakePos = partSnake->getPosition();
-        partSnake->previousDirection = partSnake->moveDirection;
-        partSnake->moveDirection = previousDir;
+        std::swap(partSnake->moveDirection, previousDir);
 
         if(partSnake->moveDirection.x == 1 || partSnake->moveDirection.x == -1)
         {
             partSnake->setImage(snakePartHorizontallyImage);
-        }
-        if(partSnake->moveDirection.y == 1 || partSnake->moveDirection.y == -1)
+        } else
         {
-
             partSnake->setImage(snakePartVerticallyImage);
         }
 
-        partSnake->setPosition(headPos);
+        partSnake->setPosition(previousPos);
 
-        headPos = partSnakePos;
-        previousDir = partSnake->previousDirection;
+        previousPos = partSnakePos;
     }
 
-    if(previousDir.x == 1)  tail->setImage(snakeTailRightImage);
-    if(previousDir.x == -1) tail->setImage(snakeTailLeftImage);
-    if(previousDir.y == 1)  tail->setImage(snakeTailUpImage);
-    if(previousDir.y == -1) tail->setImage(snakeTailDownImage);
+    std::swap(tail->moveDirection, previousDir);
 
-    tail->setPosition(headPos);
+    if(tail->moveDirection.x == 1)
+    {
+        tail->setImage(snakeTailRightImage);
+    }
+    else{
+        if(tail->moveDirection.x == -1)
+        {
+            tail->setImage(snakeTailLeftImage);
+        }
+        else{
+            if(tail->moveDirection.y == 1)
+            {
+                tail->setImage(snakeTailUpImage);
+            }
+            else{
+                tail->setImage(snakeTailDownImage);
+            }
+        }
+
+    }
+
+    tail->setPosition(previousPos);
 }
