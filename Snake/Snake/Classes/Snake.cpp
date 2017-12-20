@@ -54,31 +54,31 @@ EventKeyboard::KeyCode Snake::onKeyboardPressed(EventKeyboard::KeyCode keyCode, 
     {
         case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
         case EventKeyboard::KeyCode::KEY_A:
-            if(head->moveDirection.x != 1) {
-                head->moveDirection.setPoint(-1,0);
+            if(head->moveDirection != Direction::right) {
+                head->moveDirection = Direction ::left;
                 head->setImage(snakeHeadLeftImage);
             }
 
             break;
         case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
         case EventKeyboard::KeyCode::KEY_D:
-            if(head->moveDirection.x != -1) {
-                head->moveDirection.setPoint(1,0);
+            if(head->moveDirection != Direction ::left) {
+                head->moveDirection = Direction::right;
                 head->setImage(snakeHeadRightImage);
             }
             break;
         case EventKeyboard::KeyCode::KEY_UP_ARROW:
         case EventKeyboard::KeyCode::KEY_W:
-            if(head->moveDirection.y != -1) {
-                head->moveDirection.setPoint(0,1);
+            if(head->moveDirection != Direction ::down) {
+                head->moveDirection = Direction::up;
                 head->setImage(snakeHeadUpImage);
             }
 
             break;
         case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
         case EventKeyboard::KeyCode::KEY_S:
-            if(head->moveDirection.y != 1) {
-                head->moveDirection.setPoint(0,-1);
+            if(head->moveDirection != Direction::up) {
+                head->moveDirection = Direction::down;
                 head->setImage(snakeHeadDownImage);
             }
             break;
@@ -91,7 +91,7 @@ void Snake::checkCollisionWithFood()
    {
        PartSnake* newPartSnake = PartSnake::createPartSnake(snakePartHorizontallyImage);
 
-       if(tail->moveDirection.y)
+       if(tail->moveDirection == Direction::up || tail->moveDirection == Direction::down)
            newPartSnake->setImage(snakePartVerticallyImage);
 
        Vec2 newPartSnakePos = tail->getPosition();;
@@ -100,14 +100,25 @@ void Snake::checkCollisionWithFood()
        addChild(newPartSnake);
        snakeBodyPart.pushBack(newPartSnake);
 
-       if(tail->moveDirection.x == 1) {
-           tail->setPosition(newPartSnakePos.x - newPartSnake->getBoundingBox().size.width, newPartSnakePos.y);
-       } else if(tail->moveDirection.x == -1) {
-           tail->setPosition(newPartSnakePos.x + newPartSnake->getBoundingBox().size.width, newPartSnakePos.y);
-       } else if(tail->moveDirection.y == 1) {
-           tail->setPosition(newPartSnakePos.x, newPartSnakePos.y - newPartSnake->getBoundingBox().size.height);
-       } else {
-           tail->setPosition(newPartSnakePos.x, newPartSnakePos.y - newPartSnake->getBoundingBox().size.height);
+       switch(tail->moveDirection) {
+           case Direction::up:
+               tail->setPosition(newPartSnakePos.x,
+                                 newPartSnakePos.y - newPartSnake->getBoundingBox().size.height);
+               break;
+           case Direction::down:
+               tail->setPosition(newPartSnakePos.x,
+                                 newPartSnakePos.y - newPartSnake->getBoundingBox().size.height);
+               break;
+           case Direction::left:
+               tail->setPosition(newPartSnakePos.x + newPartSnake->getBoundingBox().size.width,
+                                 newPartSnakePos.y);
+               break;
+           case Direction::right:
+               tail->setPosition(newPartSnakePos.x - newPartSnake->getBoundingBox().size.width,
+                                 newPartSnakePos.y);
+               break;
+           default:
+               throw std::logic_error{"Unexpected case"};
        }
 
        counterOfCollectedApples++;
@@ -149,10 +160,12 @@ void Snake::checkBorder()
 void Snake::update(float delta)
 {
     Vec2 previousPos = head->getPosition();
-    Vec2 previousDir = head->moveDirection;
+    Direction previousDir = head->moveDirection;
 
-    Vec2 newHeadPos(head->getPositionX() + (head->moveDirection.x * snakeStepSize),
-                    head->getPositionY() + (head->moveDirection.y * snakeStepSize));
+    Vec2 directionStep = head->getDirectionVec2(head->moveDirection);
+
+    Vec2 newHeadPos(head->getPositionX() + (directionStep.x * snakeStepSize),
+                    head->getPositionY() + (directionStep.y * snakeStepSize));
 
     head->setPosition(newHeadPos);
 
@@ -163,31 +176,39 @@ void Snake::update(float delta)
 
     for(auto &partSnake: snakeBodyPart)
     {
-        if (partSnake->moveDirection.x != 0)
-        {
-            partSnake->setImage(snakePartHorizontallyImage);
-        } else
-        {
-            partSnake->setImage(snakePartVerticallyImage);
+        std::swap(partSnake->moveDirection, previousDir);
+
+        switch(partSnake->moveDirection) {
+            case Direction::up:
+                partSnake->setImage(snakePartVerticallyImage); break;
+            case Direction::down:
+                partSnake->setImage(snakePartVerticallyImage); break;
+            case Direction::left:
+                partSnake->setImage(snakePartHorizontallyImage); break;
+            case Direction::right:
+                partSnake->setImage(snakePartHorizontallyImage); break;
+            default:
+                throw std::logic_error{"Unexpected case"};
         }
 
         Vec2  partSnakePos = partSnake->getPosition();
-        std::swap(partSnake->moveDirection, previousDir);
         partSnake->setPosition(previousPos);
-
         previousPos = partSnakePos;
     }
 
     std::swap(tail->moveDirection, previousDir);
 
-    if(tail->moveDirection.x == 1) {
-        tail->setImage(snakeTailRightImage);
-    } else if(tail->moveDirection.x == -1) {
-        tail->setImage(snakeTailLeftImage);
-    } else if(tail->moveDirection.y == 1) {
-        tail->setImage(snakeTailUpImage);
-    } else {
-        tail->setImage(snakeTailDownImage);
+    switch(tail->moveDirection) {
+        case Direction::up:
+            tail->setImage(snakeTailUpImage); break;
+        case Direction::down:
+            tail->setImage(snakeTailDownImage); break;
+        case Direction::left:
+            tail->setImage(snakeTailLeftImage); break;
+        case Direction::right:
+            tail->setImage(snakeTailRightImage); break;
+        default:
+            throw std::logic_error{"Unexpected case"};
     }
 
     tail->setPosition(previousPos);

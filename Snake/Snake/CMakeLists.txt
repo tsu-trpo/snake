@@ -140,6 +140,7 @@ set(GAME_HEADERS
         Classes/Snake.h
         Classes/GlobalConstants.h
         Classes/Food.h
+        Classes/Direction.h
         ${PLATFORM_SPECIFIC_HEADERS})
 
 

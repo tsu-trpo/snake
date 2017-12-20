@@ -12,3 +12,19 @@ void PartSnake::setImage(const std::string &name)
 {
     initWithFile(name);
 }
+
+Vec2 PartSnake::getDirectionVec2(Direction dir)
+{
+    switch(dir) {
+        case Direction::up:
+            return {0, 1};
+        case Direction::down:
+            return {0, -1};
+        case Direction::left:
+            return {-1, 0};
+        case Direction::right:
+            return {1, 0};
+        default:
+            throw std::logic_error{"Unexpected case"};
+    }
+}

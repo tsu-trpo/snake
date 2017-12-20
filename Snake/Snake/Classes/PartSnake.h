@@ -1,13 +1,16 @@
 #pragma once
 #include "cocos2d.h"
 #include <string>
+#include "Direction.h"
 
 using  namespace cocos2d;
 
 class PartSnake : public Sprite
 {
 public:
-    Vec2 moveDirection{1,0};
+    Direction moveDirection = Direction::right;
+
+    Vec2 getDirectionVec2(Direction dir);
 
     void setImage(const std::string &name);
 
