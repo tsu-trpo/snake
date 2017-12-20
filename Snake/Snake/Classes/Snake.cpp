@@ -34,6 +34,10 @@ bool Snake::init()
                            head->getPositionY()));
     addChild(tail);
 
+    apple = Food::createApple();
+    apple->setRandomPositionApple();
+    addChild(apple);
+
     auto listener = EventListenerKeyboard::create();
     listener->onKeyPressed = CC_CALLBACK_2(Snake::onKeyboardPressed, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, head);
@@ -81,6 +85,67 @@ EventKeyboard::KeyCode Snake::onKeyboardPressed(EventKeyboard::KeyCode keyCode, 
     }
 }
 
+void Snake::checkCollisionWithFood()
+{
+   if(head->getBoundingBox().intersectsRect(apple->getBoundingBox()))
+   {
+       PartSnake* newPartSnake = PartSnake::createPartSnake(snakePartHorizontallyImage);
+
+       if(tail->moveDirection.y)
+           newPartSnake->setImage(snakePartVerticallyImage);
+
+       Vec2 newPartSnakePos = tail->getPosition();;
+
+       newPartSnake->setPosition(newPartSnakePos);
+       addChild(newPartSnake);
+       snakeBodyPart.pushBack(newPartSnake);
+
+       if(tail->moveDirection.x == 1) {
+           tail->setPosition(newPartSnakePos.x - newPartSnake->getBoundingBox().size.width, newPartSnakePos.y);
+       } else if(tail->moveDirection.x == -1) {
+           tail->setPosition(newPartSnakePos.x + newPartSnake->getBoundingBox().size.width, newPartSnakePos.y);
+       } else if(tail->moveDirection.y == 1) {
+           tail->setPosition(newPartSnakePos.x, newPartSnakePos.y - newPartSnake->getBoundingBox().size.height);
+       } else {
+           tail->setPosition(newPartSnakePos.x, newPartSnakePos.y - newPartSnake->getBoundingBox().size.height);
+       }
+
+       counterOfCollectedApples++;
+
+       apple->setRandomPositionApple();
+   }
+
+    if(counterOfCollectedApples == amountOfAppleTOAccelerate && velocity > minBorderVelocity)
+    {
+        velocity += acceleration;
+        counterOfCollectedApples = 0;
+        schedule(schedule_selector(Snake::update), velocity);
+    }
+}
+
+void Snake::checkCollisionWithBody()
+{
+    for(auto &partSnake: snakeBodyPart)
+    {
+        if(head->getPosition() == partSnake->getPosition())
+            unschedule(schedule_selector(Snake::update));
+    }
+    if(head->getPosition() == tail->getPosition())
+        unschedule(schedule_selector(Snake::update));
+}
+
+void Snake::checkBorder()
+{
+    if(head->getPositionX() < origin.x )
+        head->setPositionX(screenSize.width );
+    if(head->getPositionX() > screenSize.width)
+        head->setPositionX(origin.x );
+    if(head->getPositionY() < origin.y)
+        head->setPositionY(screenSize.height );
+    if(head->getPositionY() > screenSize.height)
+        head->setPositionY(origin.y);
+}
+
 void Snake::update(float delta)
 {
     Vec2 previousPos = head->getPosition();
@@ -90,6 +155,11 @@ void Snake::update(float delta)
                     head->getPositionY() + (head->moveDirection.y * snakeStepSize));
 
     head->setPosition(newHeadPos);
+
+    checkCollisionWithFood();
+    checkCollisionWithBody();
+
+    checkBorder();
 
     for(auto &partSnake: snakeBodyPart)
     {
