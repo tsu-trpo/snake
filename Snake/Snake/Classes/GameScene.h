@@ -14,4 +14,3 @@ public:
 
     CREATE_FUNC(GameScene);
 };
-

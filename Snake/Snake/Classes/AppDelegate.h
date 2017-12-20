@@ -34,6 +34,3 @@ public:
     */
     virtual void applicationWillEnterForeground();
 };
-
-
-

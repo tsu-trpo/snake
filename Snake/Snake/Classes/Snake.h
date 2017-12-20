@@ -29,10 +29,10 @@ public:
 
     void checkBorder();
 
+    void addSnakePart();
+
     void update(float delta);
 
     virtual bool init();
     CREATE_FUNC(Snake);
 };
-
-

@@ -85,43 +85,48 @@ EventKeyboard::KeyCode Snake::onKeyboardPressed(EventKeyboard::KeyCode keyCode, 
     }
 }
 
+void Snake::addSnakePart()
+{
+    PartSnake* newPartSnake = PartSnake::createPartSnake(snakePartHorizontallyImage);
+
+    if(tail->moveDirection == Direction::up || tail->moveDirection == Direction::down)
+        newPartSnake->setImage(snakePartVerticallyImage);
+
+    Vec2 newPartSnakePos = tail->getPosition();;
+
+    newPartSnake->setPosition(newPartSnakePos);
+    addChild(newPartSnake);
+    snakeBodyPart.pushBack(newPartSnake);
+
+    switch(tail->moveDirection) {
+        case Direction::up:
+            tail->setPosition(newPartSnakePos.x,
+                              newPartSnakePos.y - newPartSnake->getBoundingBox().size.height);
+            break;
+        case Direction::down:
+            tail->setPosition(newPartSnakePos.x,
+                              newPartSnakePos.y - newPartSnake->getBoundingBox().size.height);
+            break;
+        case Direction::left:
+            tail->setPosition(newPartSnakePos.x + newPartSnake->getBoundingBox().size.width,
+                              newPartSnakePos.y);
+            break;
+        case Direction::right:
+            tail->setPosition(newPartSnakePos.x - newPartSnake->getBoundingBox().size.width,
+                              newPartSnakePos.y);
+            break;
+        default:
+            throw std::logic_error{"Unexpected case"};
+    }
+}
+
 void Snake::checkCollisionWithFood()
 {
    if(head->getBoundingBox().intersectsRect(apple->getBoundingBox()))
    {
-       PartSnake* newPartSnake = PartSnake::createPartSnake(snakePartHorizontallyImage);
-
-       if(tail->moveDirection == Direction::up || tail->moveDirection == Direction::down)
-           newPartSnake->setImage(snakePartVerticallyImage);
-
-       Vec2 newPartSnakePos = tail->getPosition();;
-
-       newPartSnake->setPosition(newPartSnakePos);
-       addChild(newPartSnake);
-       snakeBodyPart.pushBack(newPartSnake);
-
-       switch(tail->moveDirection) {
-           case Direction::up:
-               tail->setPosition(newPartSnakePos.x,
-                                 newPartSnakePos.y - newPartSnake->getBoundingBox().size.height);
-               break;
-           case Direction::down:
-               tail->setPosition(newPartSnakePos.x,
-                                 newPartSnakePos.y - newPartSnake->getBoundingBox().size.height);
-               break;
-           case Direction::left:
-               tail->setPosition(newPartSnakePos.x + newPartSnake->getBoundingBox().size.width,
-                                 newPartSnakePos.y);
-               break;
-           case Direction::right:
-               tail->setPosition(newPartSnakePos.x - newPartSnake->getBoundingBox().size.width,
-                                 newPartSnakePos.y);
-               break;
-           default:
-               throw std::logic_error{"Unexpected case"};
-       }
-
        counterOfCollectedApples++;
+
+       addSnakePart();
 
        apple->setRandomPositionApple();
    }
