@@ -13,9 +13,9 @@ void PartSnake::setImage(const std::string &name)
     initWithFile(name);
 }
 
-Vec2 PartSnake::getDirectionVec2(Direction dir)
+Vec2 PartSnake::getDirectionVec2()
 {
-    switch(dir) {
+    switch(moveDirection) {
         case Direction::up:
             return {0, 1};
         case Direction::down:

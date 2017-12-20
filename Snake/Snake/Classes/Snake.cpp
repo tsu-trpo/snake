@@ -167,7 +167,7 @@ void Snake::update(float delta)
     Vec2 previousPos = head->getPosition();
     Direction previousDir = head->moveDirection;
 
-    Vec2 directionStep = head->getDirectionVec2(head->moveDirection);
+    Vec2 directionStep = head->getDirectionVec2();
 
     Vec2 newHeadPos(head->getPositionX() + (directionStep.x * snakeStepSize),
                     head->getPositionY() + (directionStep.y * snakeStepSize));

@@ -10,7 +10,7 @@ class PartSnake : public Sprite
 public:
     Direction moveDirection = Direction::right;
 
-    Vec2 getDirectionVec2(Direction dir);
+    Vec2 getDirectionVec2();
 
     void setImage(const std::string &name);
 
