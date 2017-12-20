@@ -93,10 +93,7 @@ void Snake::update(float delta)
 
     for(auto &partSnake: snakeBodyPart)
     {
-        Vec2  partSnakePos = partSnake->getPosition();
-        std::swap(partSnake->moveDirection, previousDir);
-
-        if(partSnake->moveDirection.x == 1 || partSnake->moveDirection.x == -1)
+        if (partSnake->moveDirection.x != 0)
         {
             partSnake->setImage(snakePartHorizontallyImage);
         } else
@@ -104,6 +101,8 @@ void Snake::update(float delta)
             partSnake->setImage(snakePartVerticallyImage);
         }
 
+        Vec2  partSnakePos = partSnake->getPosition();
+        std::swap(partSnake->moveDirection, previousDir);
         partSnake->setPosition(previousPos);
 
         previousPos = partSnakePos;
@@ -111,25 +110,14 @@ void Snake::update(float delta)
 
     std::swap(tail->moveDirection, previousDir);
 
-    if(tail->moveDirection.x == 1)
-    {
+    if(tail->moveDirection.x == 1) {
         tail->setImage(snakeTailRightImage);
-    }
-    else{
-        if(tail->moveDirection.x == -1)
-        {
-            tail->setImage(snakeTailLeftImage);
-        }
-        else{
-            if(tail->moveDirection.y == 1)
-            {
-                tail->setImage(snakeTailUpImage);
-            }
-            else{
-                tail->setImage(snakeTailDownImage);
-            }
-        }
-
+    } else if(tail->moveDirection.x == -1) {
+        tail->setImage(snakeTailLeftImage);
+    } else if(tail->moveDirection.y == 1) {
+        tail->setImage(snakeTailUpImage);
+    } else {
+        tail->setImage(snakeTailDownImage);
     }
 
     tail->setPosition(previousPos);
