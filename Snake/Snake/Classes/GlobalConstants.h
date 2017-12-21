@@ -17,10 +17,10 @@ const std::string snakeTailDownImage = "SnakeTailDown.png";
 
 const std::string appleImage = "Apple.png";
 
-const int amountOfAppleTOAccelerate = 5;
+const int amountOfAppleToAccelerate = 5;
 
 const float minBorderVelocity = 0.0170;
 
-const float acceleration = -0.003;
+const float speedEncrease = -0.003;
 
 const float snakeStepSize = 14;

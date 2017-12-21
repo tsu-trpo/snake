@@ -116,9 +116,9 @@ void Snake::checkCollisionWithFood()
        apple->setRandomPositionApple();
    }
 
-    if(counterOfCollectedApples == amountOfAppleTOAccelerate && velocity > minBorderVelocity)
+    if(counterOfCollectedApples == amountOfAppleToAccelerate && velocity > minBorderVelocity)
     {
-        velocity += acceleration;
+        velocity += speedEncrease;
         counterOfCollectedApples = 0;
         schedule(schedule_selector(Snake::update), velocity);
     }
