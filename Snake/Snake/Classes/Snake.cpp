@@ -98,26 +98,10 @@ void Snake::addSnakePart()
     addChild(newPartSnake);
     snakeBodyPart.pushBack(newPartSnake);
 
-    switch(tail->moveDirection) {
-        case Direction::up:
-            tail->setPosition(newPartSnakePos.x,
-                              newPartSnakePos.y - newPartSnake->getBoundingBox().size.height);
-            break;
-        case Direction::down:
-            tail->setPosition(newPartSnakePos.x,
-                              newPartSnakePos.y - newPartSnake->getBoundingBox().size.height);
-            break;
-        case Direction::left:
-            tail->setPosition(newPartSnakePos.x + newPartSnake->getBoundingBox().size.width,
-                              newPartSnakePos.y);
-            break;
-        case Direction::right:
-            tail->setPosition(newPartSnakePos.x - newPartSnake->getBoundingBox().size.width,
-                              newPartSnakePos.y);
-            break;
-        default:
-            throw std::logic_error{"Unexpected case"};
-    }
+    Vec2 tailMoveDirection = tail->getDirectionVec2();
+    Vec2 distanceBetweenSprites(tailMoveDirection.x * newPartSnake->getBoundingBox().size.height,
+                                tailMoveDirection.y * newPartSnake->getBoundingBox().size.width);
+    tail->setPosition(tail->getPosition() - distanceBetweenSprites);
 }
 
 void Snake::checkCollisionWithFood()
