@@ -89,10 +89,11 @@ void Snake::addSnakePart()
 {
     PartSnake* newPartSnake = PartSnake::createPartSnake(snakePartHorizontallyImage);
 
-    if(tail->moveDirection == Direction::up || tail->moveDirection == Direction::down)
+    if(tail->moveDirection == Direction::up || tail->moveDirection == Direction::down) {
         newPartSnake->setImage(snakePartVerticallyImage);
+    }
 
-    Vec2 newPartSnakePos = tail->getPosition();;
+    Vec2 newPartSnakePos = tail->getPosition();
 
     newPartSnake->setPosition(newPartSnakePos);
     addChild(newPartSnake);
