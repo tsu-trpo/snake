@@ -169,11 +169,9 @@ void Snake::update(float delta)
 
         switch(partSnake->moveDirection) {
             case Direction::up:
-                partSnake->setImage(snakePartVerticallyImage); break;
             case Direction::down:
                 partSnake->setImage(snakePartVerticallyImage); break;
             case Direction::left:
-                partSnake->setImage(snakePartHorizontallyImage); break;
             case Direction::right:
                 partSnake->setImage(snakePartHorizontallyImage); break;
             default:
