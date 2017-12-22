@@ -70,7 +70,7 @@ EventKeyboard::KeyCode Snake::onKeyboardPressed(EventKeyboard::KeyCode keyCode, 
             break;
         case EventKeyboard::KeyCode::KEY_UP_ARROW:
         case EventKeyboard::KeyCode::KEY_W:
-            if(head->moveDirection != Direction ::down) {
+            if(head->moveDirection != Direction::down) {
                 head->moveDirection = Direction::up;
                 head->setImage(snakeHeadUpImage);
             }
