@@ -21,6 +21,6 @@ const int amountOfAppleToAccelerate = 5;
 
 const float minBorderVelocity = 0.0170;
 
-const float speedEncrease = -0.003;
+const float speedIncrease = -0.003;
 
 const float snakeStepSize = 14;

@@ -38,6 +38,7 @@ bool Snake::init()
     apple->setRandomPositionApple();
     addChild(apple);
 
+
     auto listener = EventListenerKeyboard::create();
     listener->onKeyPressed = CC_CALLBACK_2(Snake::onKeyboardPressed, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, head);
@@ -69,7 +70,7 @@ EventKeyboard::KeyCode Snake::onKeyboardPressed(EventKeyboard::KeyCode keyCode, 
             break;
         case EventKeyboard::KeyCode::KEY_UP_ARROW:
         case EventKeyboard::KeyCode::KEY_W:
-            if(head->moveDirection != Direction ::down) {
+            if(head->moveDirection != Direction::down) {
                 head->moveDirection = Direction::up;
                 head->setImage(snakeHeadUpImage);
             }
@@ -118,7 +119,7 @@ void Snake::checkCollisionWithFood()
 
     if(counterOfCollectedApples == amountOfAppleToAccelerate && velocity > minBorderVelocity)
     {
-        velocity += speedEncrease;
+        velocity += speedIncrease;
         counterOfCollectedApples = 0;
         schedule(schedule_selector(Snake::update), velocity);
     }
