@@ -1,7 +1,6 @@
 #pragma once
 #include "cocos2d.h"
 #include "Snake.h"
-#include "Food.h"
 
 using namespace cocos2d;
 
@@ -12,6 +11,6 @@ public:
 
     static cocos2d::Scene* createGameScene();
     virtual bool init();
+
     CREATE_FUNC(GameScene);
 };
-

@@ -1,6 +1,7 @@
 #pragma once
-#include "cocos2d.h"
 
+#include "cocos2d.h"
+#include "GameScene.h"
 /**
 @brief    The cocos2d Application.
 
@@ -33,6 +34,3 @@ public:
     */
     virtual void applicationWillEnterForeground();
 };
-
-
-
