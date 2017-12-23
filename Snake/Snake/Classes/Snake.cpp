@@ -56,14 +56,14 @@ EventKeyboard::KeyCode Snake::onKeyboardPressed(EventKeyboard::KeyCode keyCode, 
         case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
         case EventKeyboard::KeyCode::KEY_A:
             if(head->moveDirection != Direction::right) {
-                head->moveDirection = Direction ::left;
+                head->moveDirection = Direction::left;
                 head->setImage(snakeHeadLeftImage);
             }
 
             break;
         case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
         case EventKeyboard::KeyCode::KEY_D:
-            if(head->moveDirection != Direction ::left) {
+            if(head->moveDirection != Direction::left) {
                 head->moveDirection = Direction::right;
                 head->setImage(snakeHeadRightImage);
             }
