@@ -115,6 +115,8 @@ void Snake::checkCollisionWithFood()
        addSnakePart();
 
        apple->setRandomPositionApple();
+
+       getEventDispatcher()->dispatchCustomEvent(collisionWithApple);
    }
 
     if(counterOfCollectedApples == amountOfAppleToAccelerate && velocity > minBorderVelocity)
