@@ -5,6 +5,7 @@
 #include "GlobalConstants.h"
 #include "GameScene.h"
 #include "Food.h"
+#include "GameMenu.h"
 
 class Snake : public Layer
 {

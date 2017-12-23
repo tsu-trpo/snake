@@ -83,6 +83,10 @@ EventKeyboard::KeyCode Snake::onKeyboardPressed(EventKeyboard::KeyCode keyCode, 
                 head->setImage(snakeHeadDownImage);
             }
             break;
+        case EventKeyboard::KeyCode ::KEY_ESCAPE:
+            auto scence = GameMenu::createMenu();
+            Director::getInstance()->replaceScene(scence);
+            break;
     }
 }
 
@@ -129,11 +133,23 @@ void Snake::checkCollisionWithBody()
 {
     for(auto &partSnake: snakeBodyPart)
     {
-        if(head->getPosition() == partSnake->getPosition())
-            unschedule(schedule_selector(Snake::update));
+        if(head->getPosition() == partSnake->getPosition()) {
+            Label *endText = Label::createWithTTF("Уou lose, press ESC", "fonts/arial.ttf", 40);
+            endText->setPosition(Vec2(origin.x + screenSize.width * 0.5,
+                                      origin.y + screenSize.height * 0.5 + 100));
+            addChild(endText);
+
+            this->unschedule(schedule_selector(Snake::update));
+        }
     }
-    if(head->getPosition() == tail->getPosition())
-        unschedule(schedule_selector(Snake::update));
+    if(head->getPosition() == tail->getPosition()) {
+        Label *endText = Label::createWithTTF("Уou lose, press ESC", "fonts/arial.ttf", 40);
+        endText->setPosition(Vec2(origin.x + screenSize.width * 0.5,
+                                  origin.y + screenSize.height * 0.5 + 100));
+        addChild(endText);
+
+        this->unschedule(schedule_selector(Snake::update));
+    }
 }
 
 void Snake::checkBorder()
