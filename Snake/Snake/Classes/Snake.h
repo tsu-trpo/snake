@@ -32,6 +32,8 @@ public:
 
     void addSnakePart();
 
+    void stopGame();
+
     void update(float delta);
 
     virtual bool init();

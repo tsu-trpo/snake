@@ -129,26 +129,26 @@ void Snake::checkCollisionWithFood()
     }
 }
 
+void Snake::stopGame()
+{
+    Label *endText = Label::createWithTTF("Уou lose, press ESC", "fonts/arial.ttf", 40);
+    endText->setPosition(Vec2(origin.x + screenSize.width * 0.5,
+                              origin.y + screenSize.height * 0.5 + 100));
+    addChild(endText);
+
+    this->unschedule(schedule_selector(Snake::update));
+}
+
 void Snake::checkCollisionWithBody()
 {
     for(auto &partSnake: snakeBodyPart)
     {
         if(head->getPosition() == partSnake->getPosition()) {
-            Label *endText = Label::createWithTTF("Уou lose, press ESC", "fonts/arial.ttf", 40);
-            endText->setPosition(Vec2(origin.x + screenSize.width * 0.5,
-                                      origin.y + screenSize.height * 0.5 + 100));
-            addChild(endText);
-
-            this->unschedule(schedule_selector(Snake::update));
+            stopGame();
         }
     }
     if(head->getPosition() == tail->getPosition()) {
-        Label *endText = Label::createWithTTF("Уou lose, press ESC", "fonts/arial.ttf", 40);
-        endText->setPosition(Vec2(origin.x + screenSize.width * 0.5,
-                                  origin.y + screenSize.height * 0.5 + 100));
-        addChild(endText);
-
-        this->unschedule(schedule_selector(Snake::update));
+        stopGame();
     }
 }
 
