@@ -131,6 +131,7 @@ set(GAME_SRC
         Classes/PartSnake.cpp
         Classes/Snake.cpp
         Classes/Food.cpp
+        Classes/GameMenu.cpp
     ${PLATFORM_SPECIFIC_SRC})
 
 set(GAME_HEADERS
@@ -141,6 +142,7 @@ set(GAME_HEADERS
         Classes/GlobalConstants.h
         Classes/Food.h
         Classes/Direction.h
+        Classes/GameMenu.h
         ${PLATFORM_SPECIFIC_HEADERS})
 
 

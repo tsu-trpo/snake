@@ -5,6 +5,7 @@
 #include "GlobalConstants.h"
 #include "GameScene.h"
 #include "Food.h"
+#include "GameMenu.h"
 
 class Snake : public Layer
 {
@@ -30,6 +31,8 @@ public:
     void checkBorder();
 
     void addSnakePart();
+
+    void stopGame();
 
     void update(float delta);
 
