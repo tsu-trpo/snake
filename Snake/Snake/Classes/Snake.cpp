@@ -133,7 +133,7 @@ void Snake::checkCollisionWithFood()
 
 void Snake::stopGame()
 {
-    Label *endText = Label::createWithTTF("Уou lose, press ESC", "fonts/arial.ttf", 40);
+    Label *endText = Label::createWithTTF("Уou lose, press ESC", font, 40);
     endText->setPosition(Vec2(origin.x + screenSize.width * 0.5,
                               origin.y + screenSize.height * 0.5 + 100));
     addChild(endText);
