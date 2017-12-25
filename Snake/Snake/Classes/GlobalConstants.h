@@ -24,3 +24,7 @@ const float minBorderVelocity = 0.0170;
 const float speedIncrease = -0.003;
 
 const float snakeStepSize = 14;
+
+static const char* collisionWithApple = "collisionWithApple";
+
+static const char* font = "fonts/arial.ttf";

@@ -119,6 +119,8 @@ void Snake::checkCollisionWithFood()
        addSnakePart();
 
        apple->setRandomPositionApple();
+
+       getEventDispatcher()->dispatchCustomEvent(collisionWithApple);
    }
 
     if(counterOfCollectedApples == amountOfAppleToAccelerate && velocity > minBorderVelocity)
@@ -169,10 +171,10 @@ void Snake::update(float delta)
     Vec2 previousPos = head->getPosition();
     Direction previousDir = head->moveDirection;
 
-    Vec2 stepDerection = head->getDirectionVec2();
+    Vec2 stepDirection = head->getDirectionVec2();
 
-    Vec2 newHeadPos(head->getPositionX() + (stepDerection.x * snakeStepSize),
-                    head->getPositionY() + (stepDerection.y * snakeStepSize));
+    Vec2 newHeadPos(head->getPositionX() + (stepDirection.x * snakeStepSize),
+                    head->getPositionY() + (stepDirection.y * snakeStepSize));
 
     head->setPosition(newHeadPos);
 
