@@ -18,7 +18,7 @@ bool GameScene::init()
     background->setPosition(Vec2(origin.x + screenSize.width * 0.5, origin.y + screenSize.height * 0.5));
     this->addChild(background,0);
 
-    score = new Score();
+    Score* score = new Score();
     addChild(score);
 
     auto Snake = Snake::create();

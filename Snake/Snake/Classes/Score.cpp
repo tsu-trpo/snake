@@ -8,7 +8,7 @@ Score::Score()
 
     const int fontSize = 40;
     std::string scoreText = "Score: " + std::to_string(score);
-    label = Label::createWithTTF(scoreText,"fonts/arial.ttf", fontSize);
+    label = Label::createWithTTF(scoreText, font, fontSize);
     label->setColor(Color3B::WHITE);
 
     label->setPosition(Vec2(origin.x + screenSize.width * 0.8, origin.y + screenSize.height * 0.95));
