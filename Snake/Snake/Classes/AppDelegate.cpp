@@ -72,7 +72,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     register_all_packages();
 
-    auto scene = GameScene::createGameScene();
+    auto scene = GameMenu::createMenu();
     director->runWithScene(scene);
 
     return true;

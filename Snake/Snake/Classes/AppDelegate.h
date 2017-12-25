@@ -1,7 +1,7 @@
 #pragma once
 
 #include "cocos2d.h"
-#include "Snake.h"
+#include "GameMenu.h"
 /**
 @brief    The cocos2d Application.
 
